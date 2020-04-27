@@ -9,6 +9,7 @@ library(optparse)
 
 source('utils/read-data.r')
 source('utils/process-covariates.r')
+source('utils/alter_interventions.r')
 
 # Commandline options and parsing
 parser <- OptionParser()
@@ -58,10 +59,13 @@ ifr.by.country <- read_ifr_data()
 # Read interventions
 interventions <- read_interventions(countries)
 
-N2 <- 100 # increase if you need more forecast
+N2 <- 565 # increase if you need more forecast
 
 processed_data <- process_covariates(countries = countries, interventions = interventions, 
                                      d = d , ifr.by.country = ifr.by.country, N2 = N2)
+
+processed_data <- alter_interventions(processed_data, intervention_schedule)
+
 stan_data = processed_data$stan_data
 dates = processed_data$dates
 deaths_by_country = processed_data$deaths_by_country
